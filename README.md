@@ -16,7 +16,7 @@ And don't be surprised, currently the output is a mix of german and english lang
 
 # Installation
 
-You'll need a running Gulp and Bwser installation. Then do a git clone on the repository:
+You'll need a running Gulp and Bower installation. Then do a git clone on the repository:
 
     git clone https://github.com/geschke/RaspiDashboard.git
 
