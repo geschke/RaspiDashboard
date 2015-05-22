@@ -1,10 +1,10 @@
 
 
 var appconfig = {
-    database: { host: '192.168.10.249',
+    database: { host: '192.168.x.y',
                 port: '8086',
-                user: 'root',
-                password: 'root'
+                user: 'username',
+                password: 'password'
     }
 };
 
