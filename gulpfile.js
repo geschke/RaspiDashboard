@@ -63,7 +63,7 @@ gulp.task('scripts', function () {
                 debug: true,
                 transform: [reactify]
             }))
-            .pipe(uglify())
+       //     .pipe(uglify())
             .pipe(gulp.dest(config.publicDir + '/js'));
 });
 

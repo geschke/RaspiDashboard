@@ -16,10 +16,11 @@
  */
 
 
+
 var React = require('react');
 
 
-var DiagramComponent = React.createClass({
+var DiagramComponent2 = React.createClass({
     setupGraph: function (data)
     {
 
@@ -44,12 +45,12 @@ var DiagramComponent = React.createClass({
 
 
             chart.yAxis
-                    .axisLabel('Events')
-                    // .tickFormat(d3.format(',.2f'))
+                    .axisLabel('Grad Celsius / %')
+                     .tickFormat(d3.format('.02f'))
                     ;
 
-            $("#chart1").html("");
-            d3.select('#chart1').append('svg')
+            $("#chart2").html("");
+            d3.select('#chart2').append('svg')
                     .datum(data)
                     .call(chart);
 
@@ -63,8 +64,10 @@ var DiagramComponent = React.createClass({
         var chart;
         var parseDate = d3.time.format("%Y-%m-%dT%H:%M:%SZ").parse;
         var that = this;
-        var data = Array();
-        d3.json("http://" + appconfig.database.host + ':' +  appconfig.database.port + '/query?u=' + appconfig.database.user + '&p=' + appconfig.database.password + "&q=select%20count(value)%20from%20pir%20where%20time%20%3E%20%27" + startDate + "%27%20and%20time%20%3C%20%27" + endDate + "%27%20group%20by%20time(10m)&db=pir_sensors", function (error, result) {
+        var dataTemp = Array();
+        var dataHum = Array();
+        d3.json("http://" + appconfig.database.host + ':' +  appconfig.database.port + '/query?u=' + appconfig.database.user + '&p=' + appconfig.database.password + "&q=select%20*%20from%20dht%20where%20time%20%3E%20%27" + startDate + "%27%20and%20time%20%3C%20%27" + endDate + "%27&db=dht22_sensors", function (error, result) {
+
 
             if (typeof result.results[0].series == 'undefined') {
                 that.props.onDiagramError("Could not load values from database.");
@@ -75,19 +78,33 @@ var DiagramComponent = React.createClass({
             result = result.results[0].series[0].values;
                 
             var parsedResult = {};
+            var parsedHum = {};
             result.forEach(function (d) {
                 parsedResult = {};
+                parsedHum = {};
                 parsedResult.series = 0;
-                parsedResult.x = parseDate(d[0]);
-                parsedResult.y = +d[1];
-                data.push(parsedResult);
+                var dbDate = d[0].slice(0,19) + 'Z';
+                parsedResult.x = parseDate(dbDate);
+                parsedResult.y = parseFloat(+d[2]);
+                dataTemp.push(parsedResult);
+                parsedHum.series = 1;
+                parsedHum.x = parseDate(dbDate);
+                
+                parsedHum.y = parseFloat(+d[1]);
+                dataHum.push(parsedHum);
             });
 
             var resultData = [{
-                    values: data,
-                    key: "Motion detected",
+                    values: dataTemp,
+                    key: "Temperature",
                     color: "#b51c1c"
-                }];
+                },
+                {
+                    values: dataHum,
+                    key: "Humidity",
+                    color: "#331d9c"
+                }
+            ];
 
 
             that.setupGraph(resultData);
@@ -107,12 +124,11 @@ var DiagramComponent = React.createClass({
         }
        
         return (
-                <div id = "chart1">
+                <div id = "chart2">
                 </div>
                 );
     }
 });
 
 
-
-module.exports = DiagramComponent;
+module.exports = DiagramComponent2;

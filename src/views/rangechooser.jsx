@@ -20,6 +20,7 @@ var React = require('react');
 var RangeElement = require('./rangeelement.jsx');
 var RangeElementsWrapper = require('./rangeelementswrapper.jsx');
 var DiagramComponent = require('./diagramcomponent.jsx');
+var DiagramComponent2 = require('./diagramcomponent2.jsx');
 var DatetimeChooser = require('./datetimechooser.jsx');
 var rangeElements = require('./rangeelements.jsx');
 var DiagramError = require('./diagramerror.jsx');
@@ -189,6 +190,22 @@ var RangeChooser = React.createClass({
             <DiagramChartNote startDate={ this.state.startDate } endDate={ this.state.endDate } />
           </div>
         </div>
+
+<div className="chart-wrapper">
+          <div className="chart-title">
+            Temperatur / Feuchtigkeit 
+          </div>
+          <div className="chart-stage">
+            <div idName="grid-1-1">
+        <DiagramComponent2 onDiagramDrawn={ this.handleDiagramDrawn } onDiagramError={ this.handleDiagramError } drawDiagram={ this.state.drawDiagram } startDate={ this.state.startDate } endDate={ this.state.endDate } />
+                </div>
+          </div>
+          <div className="chart-notes">
+            <DiagramChartNote startDate={ this.state.startDate } endDate={ this.state.endDate } />
+          </div>
+        </div>
+
+
       </div>
       <div className="col-sm-4">
         <div className="chart-wrapper">
