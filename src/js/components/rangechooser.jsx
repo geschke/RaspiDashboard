@@ -25,6 +25,8 @@ var DatetimeChooser = require('./datetimechooser.jsx');
 var rangeElements = require('./rangeelements.jsx');
 var DiagramError = require('./diagramerror.jsx');
 var DiagramChartNote = require('./diagramchartnote.jsx');
+var DiagramActions = require('../actions/DiagramActions.js');
+
 
 
 var RangeChooser = React.createClass({
@@ -221,7 +223,7 @@ var RangeChooser = React.createClass({
               <DatetimeChooser datetimeType={ this.state.datetimeType } datetimeOptions={ this.state.datetimeOptions} />
             </div>
             <div className="form-group">
-                <button type="button" onClick={ this.showDiagram } className="btn btn-primary" autoComplete="off">Zeige Daten</button>
+                <button type="button" onClick={ this._onShowDiagram } className="btn btn-primary" autoComplete="off">Zeige Daten</button>
             </div>
         
           </div>
@@ -236,7 +238,13 @@ var RangeChooser = React.createClass({
            
 
     );
-  }
+  },
+  
+  _onShowDiagram: function(startDate) {
+      console.log("in onshowdiagram");
+    DiagramActions.showDiagram(startDate);
+    //this.setState({isEditing: false});
+  },
     
     
   

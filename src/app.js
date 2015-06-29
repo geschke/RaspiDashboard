@@ -16,10 +16,18 @@
  */
 
 var React = require('react');
-
+/*
 var MainArea = React.createFactory(require('./js/components/mainarea.jsx'));
 if (typeof window !== 'undefined') {
   window.onload = function() {
     React.render(MainArea(), document.getElementById('content'));
   }
 }
+*/
+//var appconfig = require('./js/config/config.js');
+var DiagramApp = require('./js/components/DiagramApp.jsx');
+
+React.render(
+  <DiagramApp />,
+  document.getElementById('content')
+);

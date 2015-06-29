@@ -8,4 +8,5 @@ var appconfig = {
     }
 };
 
-//module.exports = appconfig
+
+//module.exports = appconfig;

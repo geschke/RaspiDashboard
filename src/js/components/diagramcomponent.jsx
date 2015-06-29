@@ -18,6 +18,14 @@
 
 var React = require('react');
 
+// fix this, don't know the errors now
+var appconfig = {
+    database: { host: '192.168.10.249',
+                port: '8086',
+                user: 'root',
+                password: 'root'
+    }
+};
 
 var DiagramComponent = React.createClass({
     setupGraph: function (data)
