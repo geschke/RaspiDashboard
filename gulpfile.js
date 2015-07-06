@@ -78,10 +78,10 @@ gulp.task('libraries_js', function () {
         config.bowerDir + '/nvd3/build/nv.d3.js',
     ])
             .pipe(concat('libraries.js'))
-            .pipe(uglify({
-                compress: true,
-                outSourceMap: true,
-            }))
+            //.pipe(uglify({
+            //    compress: true,
+            //    outSourceMap: true,
+            //}))
             .pipe(gulp.dest(config.publicDir + '/js'));
 });
 

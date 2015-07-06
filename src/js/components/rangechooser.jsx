@@ -38,9 +38,9 @@ var RangeChooser = React.createClass({
         });
         return {rangeElements:rangeList, 
             datetimeOptions: { locale: 'de' },
-            datetimeType: 'simple',
-            startDate: moment().format('YYYY-MM-DD'),
-            endDate: moment().add(1,'days').format('YYYY-MM-DD'),
+            datetimeType: this.props.datetimeType,
+            startDate: this.props.startDate,
+            endDate: this.props.endDate,
             drawDiagram: true,
             diagramError: false
         };
@@ -88,7 +88,7 @@ var RangeChooser = React.createClass({
         } 
     },
     
-    getStartEndDate: function(rangeChosen) {
+  /*  getStartEndDate: function(rangeChosen) {
         var startDate = this.state.startDate;
         var endDate = this.state.endDate;
         startDate = $("#datetimepicker1").data("DateTimePicker").date().format('YYYY-MM-DD'); 
@@ -125,14 +125,19 @@ var RangeChooser = React.createClass({
                 break;
         }
         return {startDate: startDate, endDate: endDate};
-    },
+    },*/
     
     whenClicked: function(rangeElement){
         var rangeChosen = parseInt(rangeElement,10);
+        console.log("in whenClicked on a range element");
+        this._onRangeChosen(rangeChosen);
+        /*
         var datetimeType = 'simple';
         if (parseInt(rangeElement,10) == 3 ) {
             datetimeType = 'range';
-        }
+        }*/
+        
+        /*
         var dateRange = this.getStartEndDate(rangeChosen);
         var rangeElements = this.getRangeList(rangeChosen);
         this.setState({
@@ -143,7 +148,7 @@ var RangeChooser = React.createClass({
             endDate: dateRange.endDate,
             diagramError: false
         });
-        
+        */
         return;
     },
      
@@ -185,11 +190,11 @@ var RangeChooser = React.createClass({
           </div>
           <div className="chart-stage">
             <div idName="grid-1-1">
-        <DiagramComponent onDiagramDrawn={ this.handleDiagramDrawn } onDiagramError={ this.handleDiagramError } drawDiagram={ this.state.drawDiagram } startDate={ this.state.startDate } endDate={ this.state.endDate } />
+        <DiagramComponent onDiagramDrawn={ this.handleDiagramDrawn } onDiagramError={ this.handleDiagramError } drawDiagram={ this.state.drawDiagram } startDate={ this.props.startDate } endDate={ this.props.endDate } />
                 </div>
           </div>
           <div className="chart-notes">
-            <DiagramChartNote startDate={ this.state.startDate } endDate={ this.state.endDate } />
+            <DiagramChartNote startDate={ this.props.startDate } endDate={ this.props.endDate } />
           </div>
         </div>
 
@@ -199,11 +204,11 @@ var RangeChooser = React.createClass({
           </div>
           <div className="chart-stage">
             <div idName="grid-1-1">
-        <DiagramComponent2 onDiagramDrawn={ this.handleDiagramDrawn } onDiagramError={ this.handleDiagramError } drawDiagram={ this.state.drawDiagram } startDate={ this.state.startDate } endDate={ this.state.endDate } />
+        <DiagramComponent2 onDiagramDrawn={ this.handleDiagramDrawn } onDiagramError={ this.handleDiagramError } drawDiagram={ this.state.drawDiagram } startDate={ this.props.startDate } endDate={ this.props.endDate } />
                 </div>
           </div>
           <div className="chart-notes">
-            <DiagramChartNote startDate={ this.state.startDate } endDate={ this.state.endDate } />
+            <DiagramChartNote startDate={ this.props.startDate } endDate={ this.props.endDate } />
           </div>
         </div>
 
@@ -240,14 +245,20 @@ var RangeChooser = React.createClass({
     );
   },
   
-  _onShowDiagram: function(startDate) {
+  _onShowDiagram: function(event, startDate) {
       console.log("in onshowdiagram");
+      console.log(event);
+      console.log(startDate);
     DiagramActions.showDiagram(startDate);
     //this.setState({isEditing: false});
   },
     
     
-  
+  _onRangeChosen: function(range) {
+      console.log("in onRangeChosen");
+      console.log(range);
+      DiagramActions.rangeChosen(range);
+  }
         
 });
       

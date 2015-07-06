@@ -32,6 +32,21 @@ var DiagramActions = {
       dateField: dateField
     });
   },
+  setStartDate: function(startDate) {
+      console.log("in Actions: setDateStart");
+      AppDispatcher.dispatch({
+          actionType: DiagramConstants.DIAGRAM_DATE_START_CHANGE,
+          startDate: startDate
+      });
+  },
+  
+  rangeChosen: function(range) {
+      console.log("in Actions: rangeChosen");
+      AppDispatcher.dispatch({
+          actionType: DiagramConstants.DIAGRAM_RANGE_CHOSEN,
+          range: range
+      });
+  }
 
   /**
    * @param  {string} id The ID of the ToDo item

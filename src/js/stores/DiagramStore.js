@@ -28,8 +28,8 @@ var _range = 0;
  * Create a TODO item.
  * @param  {string} text The content of the TODO
  */
-function changeDate(dateField) {
-      console.log("in changeDate");
+function changeStartDate(startDate) {
+      console.log("in changeStartDate");
   // Hand waving here -- not showing how this interacts with XHR or persistent
   // server-side storage.
   // Using the current timestamp + random number in place of a real id.
@@ -39,9 +39,47 @@ function changeDate(dateField) {
     complete: false,
     text: text
   };*/
-    _startDate = dateField;
+    _startDate = startDate;
     console.log(_startDate);
 }
+
+
+function changeEndDate(endDate) {
+      console.log("in changeEndDate");
+  // Hand waving here -- not showing how this interacts with XHR or persistent
+  // server-side storage.
+  // Using the current timestamp + random number in place of a real id.
+  /*var id = (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
+  _todos[id] = {
+    id: id,
+    complete: false,
+    text: text
+  };*/
+    _endDate = endDate;
+    console.log(_endDate);
+}
+
+function changeRange(range) {
+    console.log("in changeRange");
+    _range = range;
+}
+
+
+
+function getRange() 
+{
+    return _range;
+}
+
+function getDatetimeType()
+{
+    return _datetimeType;
+}
+
+
+
+
+///////////////////////////////////////////////////////
 
 /**
  * Update a TODO item.
@@ -49,10 +87,12 @@ function changeDate(dateField) {
  * @param {object} updates An object literal containing only the data to be
  *     updated.
  */
+/*
 function update(id, updates) {
+    
   _todos[id] = assign({}, _todos[id], updates);
 }
-
+*/
 /**
  * Update all of the TODO items with the same object.
  *     the data to be updated.  Used to mark all TODOs as completed.
@@ -60,37 +100,41 @@ function update(id, updates) {
  *     updated.
 
  */
+/*
 function updateAll(updates) {
   for (var id in _todos) {
     update(id, updates);
   }
 }
-
+*/
 /**
  * Delete a TODO item.
  * @param  {string} id
  */
+/*
 function destroy(id) {
   delete _todos[id];
 }
+*/
 
 /**
  * Delete all the completed TODO items.
  */
-function destroyCompleted() {
+/*function destroyCompleted() {
   for (var id in _todos) {
     if (_todos[id].complete) {
       destroy(id);
     }
   }
 }
-
+*/
 var DiagramStore = assign({}, EventEmitter.prototype, {
 
   /**
    * Tests whether all the remaining TODO items are marked as completed.
    * @return {boolean}
    */
+  /*
   areAllComplete: function() {
     for (var id in _todos) {
       if (!_todos[id].complete) {
@@ -99,6 +143,7 @@ var DiagramStore = assign({}, EventEmitter.prototype, {
     }
     return true;
   },
+*/
 
   /**
    * Get the entire collection of TODOs.
@@ -113,7 +158,53 @@ var DiagramStore = assign({}, EventEmitter.prototype, {
         console.log("in getEndDate");
     return _endDate;
   },
+  
+  getStartEndDate: function()
+{
+    console.log("in getStartEndDate");
+    var startDate = _startDate;
+    var endDate = _endDate;
+    switch (_range) {
+            case 3: // range
+                
+                //endDatePicker = $("#datetimepicker2");
+                //if (endDatePicker.length) {
+                //    endDate = endDatePicker.data("DateTimePicker").date().format('YYYY-MM-DD');
+                //} 
+                if (endDate <= startDate) {
+                    endDate = moment(startDate).add(1,'days').format('YYYY-MM-DD');
+                    //endDatePicker.data("DateTimePicker").date(moment(startDate).add(1,'days'));
+            
+                }
+                break;
+            case 2: // month
+                
+                //$("#datetimepicker1").data("DateTimePicker").maxDate(false);
+                startDate = moment(startDate).startOf('month').format('YYYY-MM-DD');
+                endDate = moment(startDate).endOf('month').add(1,'days').format('YYYY-MM-DD');
+                break;
+            case 1: // week
+                //$("#datetimepicker1").data("DateTimePicker").maxDate(false);
+                startDate = moment(startDate).startOf('isoWeek').format('YYYY-MM-DD');
+                endDate = moment(startDate).endOf('isoWeek').add(1,'days').format('YYYY-MM-DD');
+                
+                break;
+            case 0: // day
+                //$("#datetimepicker1").data("DateTimePicker").maxDate(false);
+                endDate = moment(startDate).add(1,'days').format('YYYY-MM-DD');
+      
+                break;
+        }
+        return {startDate: startDate, endDate: endDate};
+},
 
+    getRange: function() {
+        return _range;
+    },
+    
+    getDatetimeType: function() {
+      return _datetimeType;  
+    },
     
     emitChange: function() {
           console.log("in emitChange");
@@ -124,6 +215,8 @@ var DiagramStore = assign({}, EventEmitter.prototype, {
    * @param {function} callback
    */
   addChangeListener: function(callback) {
+      console.log("in addChangeListener");
+      console.log(callback);
     this.on(CHANGE_EVENT, callback);
   },
 
@@ -141,14 +234,32 @@ AppDispatcher.register(function(action) {
 
   switch(action.actionType) {
     case DiagramConstants.DIAGRAM_SHOW:
-        
-        console.log(dateField);
-      //dateField = action.dateField.trim();
-      if (dateField !== '') {
-        changeDate(dateField);
+        console.log("DIAGRAM SHOW");
+        console.log(action);
+        //dateField = action.dateField.trim();
+        /*if (dateField !== '') {
+            changeDate(dateField);
+            DiagramStore.emitChange();
+        }*/
+        break;
+    case DiagramConstants.DIAGRAM_DATE_START_CHANGE:
+        console.log("DIAGRAM DATE_START_CHANGE");
+        console.log(action);
+        changeStartDate(action.startDate);
+        //DiagramStore.emitChange(); // I think it's not necessary here, because only internal state should be changed, no event listener has to react
+        break;
+    case DiagramConstants.DIAGRAM_DATE_END_CHANGE:
+        console.log("DIAGRAM DATE_END_CHANGE");
+        console.log(action);
+        changeEndDate(action.endDate);
+        //DiagramStore.emitChange();
+        break;
+   case DiagramConstants.DIAGRAM_RANGE_CHOSEN:
+        console.log("DIAGRAM RANGE CHOSEN");
+        console.log(action);
+        changeRange(action.range);
         DiagramStore.emitChange();
-      }
-      break;
+        break;
 
   /*  case TodoConstants.TODO_TOGGLE_COMPLETE_ALL:
       if (TodoStore.areAllComplete()) {

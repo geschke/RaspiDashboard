@@ -12,10 +12,16 @@ var rangeElements = require('./rangeelements.jsx');
  */
 function getDiagramState() {
       console.log("in getDiagramState");
-  return {
-      startDate: DiagramStore.getStartDate(),
-      endDate: DiagramStore.getEndDate()
+      var dateRange = DiagramStore.getStartEndDate();
+      
+  var diagramObject = {
+      startDate: dateRange.startDate,
+      endDate: dateRange.endDate,
+      range: DiagramStore.getRange(),
+      datetimeType: DiagramStore.getDatetimeType()
   };
+  console.log(diagramObject);
+  return diagramObject;
 }
 
 var DiagramApp = React.createClass({
@@ -40,7 +46,7 @@ var DiagramApp = React.createClass({
         console.log("in render");
   	return (
                  <div>
-        <RangeChooser startDate={this.state.startDate} endDate={this.state.endDate} rangeElements={rangeElements}/>
+        <RangeChooser startDate={this.state.startDate} endDate={this.state.endDate} range={ this.state.range } datetimeType={this.state.datetimeType } rangeElements={rangeElements}/>
       </div>
                 
   	);
@@ -51,7 +57,9 @@ var DiagramApp = React.createClass({
    */
   _onChange: function() {
       console.log("in _onChange");
-    this.setState(getDiagramState());
+      var diagramState = getDiagramState();
+      console.log(diagramState);
+    this.setState(diagramState);
   }
 
 });

@@ -17,12 +17,14 @@
 
 
 var React = require('react');
-    
+var DiagramActions = require('../actions/DiagramActions.js');
+
 
 var DatetimeChooser = React.createClass({
     
     componentDidUpdate: function(prevProps, prevState) {
-          var options = this.props.datetimeOptions;
+        console.log("in componentDidUpdate of DatetimeChooser");
+        /*  var options = this.props.datetimeOptions;
         if (typeof options.locale == 'undefined') {
             options.locale = 'de';  // set default, configure by whatever
         }
@@ -38,7 +40,7 @@ var DatetimeChooser = React.createClass({
             dtp1.data("DateTimePicker").maxDate(e.date);
         });
             
-        }
+        }*/
     },
     
     componentDidMount: function() {
@@ -48,7 +50,9 @@ var DatetimeChooser = React.createClass({
         if (typeof options.locale == 'undefined') {
             options.locale = 'de';  // set default, configure by whatever
         }
+      
              
+        var that = this;
         options.defaultDate = new Date();
         options.defaultDate.setMinutes(0);
         options.defaultDate.setHours(0);
@@ -56,6 +60,12 @@ var DatetimeChooser = React.createClass({
         options.format = 'LL';
         var dtp1 = $('#datetimepicker1');
         dtp1.datetimepicker(options);
+         dtp1.on("dp.change", function (e) {
+            console.log("Date changed!, call corresponding function!");
+             var startDate = dtp1.data("DateTimePicker").date().format('YYYY-MM-DD'); 
+       
+            that._onChangeStartDate(e, startDate)
+        });
                // return null;
       //  if ($('#datetimepicker2')) {
             var dtp2 = $('#datetimepicker2');
@@ -98,7 +108,16 @@ var DatetimeChooser = React.createClass({
         { dateComponent2 }
         </div>
         );
-    }
+    },
+    
+    
+     _onChangeStartDate: function(event, startDate) {
+      console.log("in onChangeStartDate");
+      console.log(event);
+      console.log(startDate);
+      DiagramActions.setStartDate(startDate);
+    //this.setState({isEditing: false});
+  },
     
 });
 
